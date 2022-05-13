@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "606967431976",
+    "project_id": "myparrot-bfc92",
+    "storage_bucket": "myparrot-bfc92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606967431976:android:b1676888a2beb7372ec61d",
+        "android_client_info": {
+          "package_name": "com.inhatc.myparrot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "606967431976-lcngqdhsu9nc9lnv8ua5evptdv7sh47v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxlPuBGKTF6HCuGvH01FFWfkbE6yuBwfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "606967431976-lcngqdhsu9nc9lnv8ua5evptdv7sh47v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

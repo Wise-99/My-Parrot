@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="board">
+        <item>게시판을 선택해주세요.</item>
+        <item>후기</item>
+        <item>자랑</item>
+        <item>질문</item>
+        <item>분양</item>
+        <item>병원</item>
+    </string-array>
+
+</resources>
