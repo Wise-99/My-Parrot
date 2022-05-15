@@ -135,7 +135,9 @@ public class WriteActivity extends AppCompatActivity {
                                 name = snapshot.child("Info/nickname").getValue(String.class); // 닉네임 가져오기
 
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
-                                uploadImg();
+                                uploadImg(); // 이미지 업로드
+
+                                //업로드한 이미지 갯수마다 넘기는 객체 다르게 생성
                                 switch (imgList.size()) {
                                     case 0:
                                         writing = new Writing(name, title, content, item, getTime(), views);
@@ -156,8 +158,7 @@ public class WriteActivity extends AppCompatActivity {
                                         writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1),imgNameList.get(2),imgNameList.get(3),imgNameList.get(4), views);
                                         break;
                                 }
-
-                                mDatabase.child("writing").push().setValue(writing); // 글 저장
+                                mDatabase.child("writing").push().setValue(writing); // DB에 글 저장
                                 Toast.makeText(WriteActivity.this, "글 작성이 완료되었습니다.", Toast.LENGTH_LONG).show();
                                 Intent writeIntent = new Intent(WriteActivity.this, MainActivity.class);
                                 startActivity(writeIntent);

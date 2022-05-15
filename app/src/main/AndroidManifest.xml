@@ -26,6 +26,7 @@
         <activity android:name=".WriteActivity" />
         <activity android:name=".SubJoinActivity" />
         <activity android:name=".WritingViewActivity" />
+        <activity android:name=".MyInfoActivity" />
     </application>
 
 </manifest>

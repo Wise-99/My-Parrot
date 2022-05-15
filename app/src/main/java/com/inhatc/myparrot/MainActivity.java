@@ -283,8 +283,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                 startActivity(intent2);
                 finish();
                 break;
-            case android.R.id.home:
-                //select back button
+            case R.id.info:
+                Intent intent3 = new Intent(this,MyInfoActivity.class);
+                startActivity(intent3);
                 finish();
                 break;
         }

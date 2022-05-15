@@ -101,7 +101,7 @@
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:background="@drawable/textview_line"
-                android:backgroundTint="@color/yellow"/>
+                android:backgroundTint="@color/light_yellow"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -109,25 +109,32 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/comment"
                     android:layout_width="300dp"
                     android:layout_height="80dp"
                     android:ems="10"
-                    android:lines="10"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:lines="10" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/comment_btn"
                     android:layout_width="100dp"
-                    android:layout_height="80dp"
+                    android:layout_height="70dp"
                     android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:text="댓글 등록" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="50sp" />
 
         </LinearLayout>
     </ScrollView>
