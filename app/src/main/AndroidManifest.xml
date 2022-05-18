@@ -22,10 +22,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".JoinActivity" />
-        <activity android:name=".WriteActivity" />
+        <activity android:name=".JoinActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".WriteActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".SubJoinActivity" />
-        <activity android:name=".WritingViewActivity" />
+        <activity android:name=".WritingViewActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".MyInfoActivity" />
     </application>
 

@@ -281,12 +281,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
             case R.id.write:
                 Intent intent2 = new Intent(this,WriteActivity.class);
                 startActivity(intent2);
-                finish();
                 break;
             case R.id.info:
                 Intent intent3 = new Intent(this,MyInfoActivity.class);
                 startActivity(intent3);
-                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
