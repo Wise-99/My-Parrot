@@ -1,5 +1,6 @@
 package com.inhatc.myparrot;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +50,8 @@ public class WritingViewActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private Button comment_btn;
+    private Button delete_btn;
+    private Button revise_btn;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabase_u;
     private DatabaseReference mDatabase_w;
@@ -67,6 +71,52 @@ public class WritingViewActivity extends AppCompatActivity {
         return getTime;
     }
 
+    private void deleteWriting(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid(); // 사용자 uid 받아오기
+
+        mDatabase_u = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase_u.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.getKey().equals(uid)) { // 로그인한 uid와 같은 uid를 DB에서 찾으면
+                        name = snapshot.child("Info/nickname").getValue(String.class); // 닉네임 가져오기
+                        if(name.equals(writename)) { // 로그인한 닉네임과 글 작성자의 닉네임이 같을 때
+                            mDatabase_w = FirebaseDatabase.getInstance().getReference("writing");
+                            mDatabase_w.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot _snapshot) {
+                                    for (DataSnapshot snapshots : _snapshot.getChildren()) {
+                                        if (snapshots.child("/content").getValue().equals(content)) {
+                                            writing_uid = snapshots.getKey();
+                                            break;
+                                        }
+                                    }
+                                    mDatabase_w.child(writing_uid).removeValue();
+                                    Toast.makeText(WritingViewActivity.this, "글이 정상적으로 삭제되었습니다.", Toast.LENGTH_LONG).show();
+                                    finish();
+                                    Intent reIntent = new Intent(WritingViewActivity.this, MainActivity.class);
+                                    startActivity(reIntent);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        } else{
+                            Toast.makeText(WritingViewActivity.this, "작성자만 글을 삭제할 수 있습니다!", Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -82,6 +132,9 @@ public class WritingViewActivity extends AppCompatActivity {
         ImageView load_img3 = (ImageView)findViewById(R.id.imageView8);
         ImageView load_img4 = (ImageView)findViewById(R.id.imageView9);
         ImageView load_img5 = (ImageView)findViewById(R.id.imageView10);
+
+        delete_btn = (Button)findViewById(R.id.writeDeleteBtn);
+        revise_btn = (Button)findViewById(R.id.writeReviseBtn);
         comment_btn = (Button)findViewById(R.id.comment_btn);
 
         Intent getIntent = getIntent();
@@ -210,7 +263,6 @@ public class WritingViewActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 uid = user.getUid(); // 댓글 작성자의 uid 받아오기
 
-
                 mDatabase_u = FirebaseDatabase.getInstance().getReference("users");
                 mDatabase_u.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -244,6 +296,13 @@ public class WritingViewActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) { }
                 });
+            }
+        });
+
+        delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteWriting();
             }
         });
     }
