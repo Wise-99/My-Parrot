@@ -20,7 +20,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/commentName"
                 android:layout_width="293dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -29,17 +29,11 @@
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/commentReviseBtn"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right|center_horizontal|end"
-                android:text="수정" />
-
-            <Button
                 android:id="@+id/commentDeleteBtn"
                 android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right|end"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:gravity="center"
                 android:text="삭제" />
 
         </LinearLayout>
@@ -52,7 +46,7 @@
             android:textSize="10sp" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/commentContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="댓글 내용"

@@ -55,7 +55,67 @@ public class MyInfoActivity extends AppCompatActivity implements RecyclerAdapter
                         email = snapshots.child("Info/email").getValue(String.class); // 이메일 가져오기
                         tv_email.setText(email);
                         tv_nickname.setText(nickname);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
 
+
+        recyclerView = findViewById(R.id.recycler_my);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        arrayList = new ArrayList<>();
+        adapter = new RecyclerAdapter(arrayList, this);
+        adapter.setListener(this);
+        recyclerView.setAdapter(adapter);
+
+        database = FirebaseDatabase.getInstance();
+        mDatabase = database.getReference("writing");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Writing writing = dataSnapshot.getValue(Writing.class);
+                    if(writing.getNickname().equals(tv_nickname.getText())){
+                        arrayList.add(writing);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                updateListItems();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        setContentView(R.layout.my_info);
+
+        TextView tv_email = (TextView)findViewById(R.id.tv_email);
+        TextView tv_nickname = (TextView)findViewById(R.id.tv_nickname);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid(); // 댓글 작성자의 uid 받아오기
+
+        mDatabase_u = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase_u.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshots : snapshot.getChildren()) {
+                    if (snapshots.getKey().equals(uid)) {
+                        nickname = snapshots.child("Info/nickname").getValue(String.class); // 닉네임 가져오기
+                        email = snapshots.child("Info/email").getValue(String.class); // 이메일 가져오기
+                        tv_email.setText(email);
+                        tv_nickname.setText(nickname);
                         break;
                     }
                 }
@@ -110,6 +170,7 @@ public class MyInfoActivity extends AppCompatActivity implements RecyclerAdapter
         intent.putExtra("time", selectedItem.getTime());
         intent.putExtra("name", selectedItem.getNickname());
         intent.putExtra("views", selectedItem.getViews());
+        intent.putExtra("tabs", selectedItem.getTab());
 
         if(selectedItem.getImage1() != null){
             intent.putExtra("img1", selectedItem.getImage1());

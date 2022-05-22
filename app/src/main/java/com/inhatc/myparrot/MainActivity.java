@@ -214,6 +214,147 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         myTabHost.setCurrentTab(0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_main);
+
+        recyclerView1 = findViewById(R.id.recyclerView1);
+        recyclerView1.setHasFixedSize(true);
+        layoutManager1 = new LinearLayoutManager(this);
+        recyclerView1.setLayoutManager(layoutManager1);
+
+        recycler_notice = findViewById(R.id.recycler_notice);
+        recycler_notice.setHasFixedSize(true);
+        layoutManager2 = new LinearLayoutManager(this);
+        recycler_notice.setLayoutManager(layoutManager2);
+
+        recycler_boast = findViewById(R.id.recycler_boast);
+        recycler_boast.setHasFixedSize(true);
+        layoutManager3 = new LinearLayoutManager(this);
+        recycler_boast.setLayoutManager(layoutManager3);
+
+        recycler_review = findViewById(R.id.recycler_review);
+        recycler_review.setHasFixedSize(true);
+        layoutManager4 = new LinearLayoutManager(this);
+        recycler_review.setLayoutManager(layoutManager4);
+
+        recycler_QA = findViewById(R.id.recycler_QA);
+        recycler_QA.setHasFixedSize(true);
+        layoutManager5 = new LinearLayoutManager(this);
+        recycler_QA.setLayoutManager(layoutManager5);
+
+        recycler_parcel_out = findViewById(R.id.recycler_parcel_out);
+        recycler_parcel_out.setHasFixedSize(true);
+        layoutManager6 = new LinearLayoutManager(this);
+        recycler_parcel_out.setLayoutManager(layoutManager6);
+
+        noticeList = new ArrayList<>();
+        reviewList = new ArrayList<>();
+        boastList = new ArrayList<>();
+        QAList = new ArrayList<>();
+        parcelOutList = new ArrayList<>();
+        arrayList = new ArrayList<>();
+
+        database = FirebaseDatabase.getInstance();
+        mDatabase = database.getReference("writing");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                noticeList.clear();
+                reviewList.clear();
+                boastList.clear();
+                QAList.clear();
+                parcelOutList.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                    Writing writing = dataSnapshot.getValue(Writing.class);
+                    if(writing.getTab().equals("공지")){
+                        noticeList.add(0, writing);
+                    } else if(writing.getTab().equals("후기")){
+                        reviewList.add(0, writing);
+                    } else if(writing.getTab().equals("자랑")){
+                        boastList.add(0, writing);
+                    } else if(writing.getTab().equals("질문")){
+                        QAList.add(0, writing);
+                    }else if(writing.getTab().equals("분양")){
+                        parcelOutList.add(0, writing);
+                    } else {
+                        arrayList.add(0, writing);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                adapter_boast.notifyDataSetChanged();
+                adapter_notice.notifyDataSetChanged();
+                adapter_QA.notifyDataSetChanged();
+                adapter_review.notifyDataSetChanged();
+                adapter_parcelOut.notifyDataSetChanged();
+                updateListItems();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        adapter = new RecyclerAdapter(arrayList, this);
+        adapter.setListener(this);
+        recyclerView1.setAdapter(adapter);
+
+        adapter_review = new RecyclerAdapter(reviewList, this);
+        adapter_review.setListener(this);
+        recycler_review.setAdapter(adapter_review);
+
+        adapter_QA = new RecyclerAdapter(QAList, this);
+        adapter_QA.setListener(this);
+        recycler_QA.setAdapter(adapter_QA);
+
+        adapter_notice = new RecyclerAdapter(noticeList, this);
+        adapter_notice.setListener(this);
+        recycler_notice.setAdapter(adapter_notice);
+
+        adapter_boast = new RecyclerAdapter(boastList, this);
+        adapter_boast.setListener(this);
+        recycler_boast.setAdapter(adapter_boast);
+
+        adapter_parcelOut = new RecyclerAdapter(parcelOutList, this);
+        adapter_parcelOut.setListener(this);
+        recycler_parcel_out.setAdapter(adapter_parcelOut);
+
+
+        //Toolbar 생성
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        myTabHost = (TabHost)findViewById(R.id.tabhost);
+        myTabHost.setup();
+
+        myTabSpec = myTabHost.newTabSpec("rank").setIndicator("랭킹").setContent(R.id.tab1);
+        myTabHost.addTab(myTabSpec);
+
+        myTabSpec = myTabHost.newTabSpec("notice").setIndicator("공지").setContent(R.id.tab2);
+        myTabHost.addTab(myTabSpec);
+
+        myTabSpec = myTabHost.newTabSpec("review").setIndicator("후기").setContent(R.id.tab3);
+        myTabHost.addTab(myTabSpec);
+
+        myTabSpec = myTabHost.newTabSpec("boast").setIndicator("자랑").setContent(R.id.tab4);
+        myTabHost.addTab(myTabSpec);
+
+        myTabSpec = myTabHost.newTabSpec("Q&A").setIndicator("질문").setContent(R.id.tab5);
+        myTabHost.addTab(myTabSpec);
+
+        myTabSpec = myTabHost.newTabSpec("parcel_out").setIndicator("분양").setContent(R.id.tab6);
+        myTabHost.addTab(myTabSpec);
+
+        myTabSpec = myTabHost.newTabSpec("hospital").setIndicator("병원").setContent(R.id.tab7);
+        myTabHost.addTab(myTabSpec);
+
+        myTabHost.setCurrentTab(0);
+    }
+
     private void updateListItems() {
         adapter.submitList(arrayList);
     }
@@ -241,6 +382,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         intent.putExtra("time", selectedItem.getTime());
         intent.putExtra("name", selectedItem.getNickname());
         intent.putExtra("views", selectedItem.getViews());
+        intent.putExtra("tabs", selectedItem.getTab());
 
         if(selectedItem.getImage1() != null){
             intent.putExtra("img1", selectedItem.getImage1());

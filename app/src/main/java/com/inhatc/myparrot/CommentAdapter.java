@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private ArrayList<Comment> arrayList;
     private Context context;
+    private OnItemClickListener mListener = null; //리스너 객체 참조 변수
+
+    interface OnItemClickListener{
+        void onDeleteClick(View v, int position);//삭제
+    }
+
+    //리스너 객체 참조를 어댑터에 전달 메서드
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
 
     public CommentAdapter(ArrayList<Comment> arrayList, Context context){
         this.arrayList = arrayList;
@@ -43,13 +54,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         TextView tv_name;
         TextView tv_time;
         TextView tv_comment;
+        Button btn_delete;
 
         public CommentViewHolder(@NonNull View itemView){
             super(itemView);
 
-            this.tv_name = itemView.findViewById(R.id.textView13);
+            this.tv_name = itemView.findViewById(R.id.commentName);
             this.tv_time = itemView.findViewById(R.id.textView14);
-            this.tv_comment = itemView.findViewById(R.id.textView15);
+            this.tv_comment = itemView.findViewById(R.id.commentContent);
+            this.btn_delete = itemView.findViewById(R.id.commentDeleteBtn);
+
+            btn_delete.setOnClickListener (new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position!=RecyclerView.NO_POSITION){
+                        if (mListener!=null){
+                            mListener.onDeleteClick(view,position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +43,7 @@ public class WritingViewActivity extends AppCompatActivity {
     private String content;
     private String writename;
     private String time;
+    private String tab;
     private int views;
     private String img1;
     private String img2;
@@ -48,19 +52,27 @@ public class WritingViewActivity extends AppCompatActivity {
     private String img5;
     private RecyclerView recycler;
     private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
+    private CommentAdapter adapter;
     private Button comment_btn;
-    private Button delete_btn;
-    private Button revise_btn;
+    private Button writingDelete_btn;
+    private Button writingRevise_btn;
+    private Button commentDelete_btn;
+    private TextView comment_name;
+    private TextView comment_content;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabase_u;
-    private DatabaseReference mDatabase_w;
-    private DatabaseReference mDatabase_c;
+    private DatabaseReference mDatabase_u = FirebaseDatabase.getInstance().getReference("users");
+    private DatabaseReference mDatabase_w = FirebaseDatabase.getInstance().getReference("writing");
+    private DatabaseReference mDatabase_c = FirebaseDatabase.getInstance().getReference("comments");
+    private FirebaseStorage storage = FirebaseStorage.getInstance("gs://myparrot-bfc92.appspot.com");
+    private StorageReference storageRef = storage.getReference();
+    private StorageReference desertRef;
     private String comments;
     private String uid;
     private String name;
     private String writing_uid;
+    private String comment_uid;
     private Comment upload_comment;
+    private Comment delete_comment;
 
     // 현재 시간을 "yyyy-MM-dd hh:mm:ss"로 표시하는 메소드
     private String getTime() {
@@ -75,7 +87,6 @@ public class WritingViewActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         uid = user.getUid(); // 사용자 uid 받아오기
 
-        mDatabase_u = FirebaseDatabase.getInstance().getReference("users");
         mDatabase_u.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -83,7 +94,6 @@ public class WritingViewActivity extends AppCompatActivity {
                     if (snapshot.getKey().equals(uid)) { // 로그인한 uid와 같은 uid를 DB에서 찾으면
                         name = snapshot.child("Info/nickname").getValue(String.class); // 닉네임 가져오기
                         if(name.equals(writename)) { // 로그인한 닉네임과 글 작성자의 닉네임이 같을 때
-                            mDatabase_w = FirebaseDatabase.getInstance().getReference("writing");
                             mDatabase_w.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot _snapshot) {
@@ -96,20 +106,108 @@ public class WritingViewActivity extends AppCompatActivity {
                                     mDatabase_w.child(writing_uid).removeValue();
                                     Toast.makeText(WritingViewActivity.this, "글이 정상적으로 삭제되었습니다.", Toast.LENGTH_LONG).show();
                                     finish();
-                                    Intent reIntent = new Intent(WritingViewActivity.this, MainActivity.class);
-                                    startActivity(reIntent);
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
                             });
+                            // Storage에서 이미지 삭제
+                            if(img1 != null){
+                                desertRef = storageRef.child("images/" + img1);
+                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // File deleted successfully
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Uh-oh, an error occurred!
+                                    }
+                                });
+                            }
+                            if(img2 != null){
+                                desertRef = storageRef.child("images/" + img2);
+                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // File deleted successfully
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Uh-oh, an error occurred!
+                                    }
+                                });
+                            }
+                            if(img3 != null){
+                                desertRef = storageRef.child("images/" + img3);
+                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // File deleted successfully
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Uh-oh, an error occurred!
+                                    }
+                                });
+                            }
+                            if(img4 != null){
+                                desertRef = storageRef.child("images/" + img4);
+                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // File deleted successfully
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Uh-oh, an error occurred!
+                                    }
+                                });
+                            }
+                            if(img5 != null){
+                                desertRef = storageRef.child("images/" + img5);
+                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // File deleted successfully
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Uh-oh, an error occurred!
+                                    }
+                                });
+                            }
                         } else{
                             Toast.makeText(WritingViewActivity.this, "작성자만 글을 삭제할 수 있습니다!", Toast.LENGTH_LONG).show();
                         }
                         break;
                     }
                 }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void deleteComment(String delete_comments){
+        mDatabase_c.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot _snapshot) {
+                for (DataSnapshot snapshots : _snapshot.getChildren()) {
+                    if (snapshots.child("/comments").getValue().equals(delete_comments)) { // 삭제할 댓글의 내용과 같은 댓글의 내용이 발견되면
+                        comment_uid = snapshots.getKey();                          // 댓글 uid 가져오기
+                        break;
+                    }
+                }
+                mDatabase_c.child(comment_uid).removeValue();                      // DB에서 댓글 삭제
+                Toast.makeText(WritingViewActivity.this, "댓글이 정상적으로 삭제되었습니다.", Toast.LENGTH_LONG).show();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -133,25 +231,42 @@ public class WritingViewActivity extends AppCompatActivity {
         ImageView load_img4 = (ImageView)findViewById(R.id.imageView9);
         ImageView load_img5 = (ImageView)findViewById(R.id.imageView10);
 
-        delete_btn = (Button)findViewById(R.id.writeDeleteBtn);
-        revise_btn = (Button)findViewById(R.id.writeReviseBtn);
+        writingDelete_btn = (Button)findViewById(R.id.writeDeleteBtn);
+        writingRevise_btn = (Button)findViewById(R.id.writeReviseBtn);
         comment_btn = (Button)findViewById(R.id.comment_btn);
+        commentDelete_btn = (Button)findViewById(R.id.commentDeleteBtn);
 
         Intent getIntent = getIntent();
         title = getIntent.getStringExtra("title");
         content = getIntent.getStringExtra("content");
         writename = getIntent.getStringExtra("name");
         time = getIntent.getStringExtra("time");
-        views = getIntent.getIntExtra("views", 1);
+        views = getIntent.getIntExtra("views", 1) + 1;
+        tab = getIntent.getStringExtra("tabs");
 
         load_title.setText(title);
         load_content.setText(content);
         load_nickname.setText("작성자 " + writename);
         load_time.setText("작성날짜 "+time);
-        load_views.setText("조회수" + String.valueOf(views));
+        load_views.setText("조회수 " + String.valueOf(views));
 
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://myparrot-bfc92.appspot.com");
-        StorageReference storageRef = storage.getReference();
+        // 조회수 업데이트
+        mDatabase_w.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshots : snapshot.getChildren()) {
+                    // 내용과 시간이 같은 글을 찾으면
+                    if (snapshots.child("/content").getValue().equals(content) && snapshots.child("/time").getValue().equals(time)) {
+                        writing_uid = snapshots.getKey(); // 글의 uid 받아오기
+                        mDatabase_w.child("/"+writing_uid+"/views").setValue(views); // 조회수 업데이트
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
         if(getIntent.getStringExtra("img1") != null){
             img1 = getIntent.getStringExtra("img1");
@@ -220,7 +335,6 @@ public class WritingViewActivity extends AppCompatActivity {
         recycler.setLayoutManager(layoutManager);
         ArrayList<Comment> arrayList = new ArrayList<>();
 
-        mDatabase_w = FirebaseDatabase.getInstance().getReference("writing");
         mDatabase_w.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot_w) {
@@ -231,6 +345,7 @@ public class WritingViewActivity extends AppCompatActivity {
                         mDatabase_c.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot_c) {
+                                arrayList.clear();
                                 for (DataSnapshot snapshots_c : snapshot_c.getChildren()) {
                                     if(snapshots_c.child("/writing_uid").getValue().equals(writing_uid)){
                                         Comment comment = snapshots_c.getValue(Comment.class);
@@ -245,7 +360,6 @@ public class WritingViewActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
@@ -254,11 +368,49 @@ public class WritingViewActivity extends AppCompatActivity {
         adapter = new CommentAdapter(arrayList, this);
         recycler.setAdapter(adapter);
 
+        // 댓글 리사이클러뷰 내에서 삭제 버튼 클릭 시
+        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(View v, int position) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                uid = user.getUid(); // 사용자 uid 받아오기
+
+                delete_comment = arrayList.get(position);   //삭제할 댓글의 정보를 Comment 클래스로 가져오기
+
+                mDatabase_u.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            if (snapshot.getKey().equals(uid)) { // 로그인한 uid를 DB에서 찾으면
+                                name = snapshot.child("Info/nickname").getValue(String.class); // 닉네임 가져오기
+                                if(name.equals(delete_comment.getNickname())) { // 로그인한 닉네임과 댓글 작성자의 닉네임이 같을 때
+                                    arrayList.remove(position);                 // 리스트에서 삭제
+                                    adapter.notifyItemRemoved(position);        // 리사이클러뷰에서 삭제
+                                    deleteComment(delete_comment.getComments());// DB에서 삭제
+                                    adapter.notifyDataSetChanged();             // 리사이클러뷰 변경 알림
+                                } else{
+                                    Toast.makeText(WritingViewActivity.this, "작성자만 댓글을 삭제할 수 있습니다!", Toast.LENGTH_LONG).show();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+        });
+
+        // 댓글 저장 버튼 클릭 시
         comment_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText comment = (EditText)findViewById(R.id.comment);
                 comments = comment.getText().toString();
+                // 입력받는 방법을 관리하는 Manager객체를 요청하여 InputMethodManager에 반환
+                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 uid = user.getUid(); // 댓글 작성자의 uid 받아오기
@@ -287,7 +439,9 @@ public class WritingViewActivity extends AppCompatActivity {
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
                                 mDatabase.child("comments").push().setValue(upload_comment); // DB에 글 저장
                                 Toast.makeText(WritingViewActivity.this, "댓글 작성이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                finish();
+                                adapter.notifyItemChanged(arrayList.size()); // 리사이클러뷰 변경 알림
+                                comment.setText("");                         // 입력한 댓글 초기화
+                                imm.hideSoftInputFromWindow(comment.getWindowToken(),0); // 키보드 내림
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) { }
@@ -299,7 +453,8 @@ public class WritingViewActivity extends AppCompatActivity {
             }
         });
 
-        delete_btn.setOnClickListener(new View.OnClickListener() {
+        // 글 삭제 버튼 클릭 시
+        writingDelete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteWriting();
