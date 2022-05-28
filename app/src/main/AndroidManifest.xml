@@ -14,7 +14,7 @@
         android:theme="@style/Theme.MyParrot" >
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="1dz4tvopm2" />
+            android:value="API_KEY" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >
