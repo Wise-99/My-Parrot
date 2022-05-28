@@ -7,17 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.Toast;
-
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,9 +20,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.naver.maps.map.MapView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerAdapter.Listener{
     TabHost myTabHost = null;
@@ -60,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
     private ArrayList<Writing> QAList;
     private ArrayList<Writing> parcelOutList;
     private FirebaseDatabase database;
+    private MapView mapView;
 
     @Override
     public void onStart() {
@@ -212,11 +208,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         myTabHost.addTab(myTabSpec);
 
         myTabHost.setCurrentTab(0);
+
+        mapView = findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mapView.onResume();
         setContentView(R.layout.activity_main);
 
         recyclerView1 = findViewById(R.id.recyclerView1);

@@ -2,7 +2,6 @@
     <string name="app_name">우앵귀</string>
     <string name="sub_name">우리 앵무새 귀엽죠?</string>
     <string name="write_content">
-        \n
         내용을 입력하세요.\n
         (최대 1000자, 사진은 최대 5장 선택 가능)\n
     </string>
