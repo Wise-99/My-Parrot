@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +43,7 @@ public class WriteActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private String uid;
     private int views = 0;
+    private int suggestion = 0;
     private String name;
     private ArrayList <Uri> imgList = new ArrayList<>();
     private ArrayList <String> imgNameList = new ArrayList<>();
@@ -89,8 +89,8 @@ public class WriteActivity extends AppCompatActivity {
         boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(boardAdapter); //어댑터에 연결
 
-        EditText writeTitle = (EditText)findViewById(R.id.writeTitle);
-        EditText writeContent =(EditText)findViewById(R.id.writeContent);
+        EditText writeTitle = (EditText)findViewById(R.id.reviseTitle);
+        EditText writeContent =(EditText)findViewById(R.id.reviseContent);
 
         //UI
         image1 = (ImageView)findViewById(R.id.imageView1);
@@ -111,10 +111,7 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
-
-
-        write_btn = (Button)findViewById(R.id.write_btn);
-
+        write_btn = (Button)findViewById(R.id.revise_btn);
         write_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,22 +137,22 @@ public class WriteActivity extends AppCompatActivity {
                                 //업로드한 이미지 갯수마다 넘기는 객체 다르게 생성
                                 switch (imgList.size()) {
                                     case 0:
-                                        writing = new Writing(name, title, content, item, getTime(), views);
+                                        writing = new Writing(name, title, content, item, getTime(), views ,suggestion);
                                         break;
                                     case 1:
-                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0), views);
+                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0), views, suggestion);
                                         break;
                                     case 2:
-                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0), imgNameList.get(1), views);
+                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0), imgNameList.get(1), views, suggestion);
                                         break;
                                     case 3:
-                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1), imgNameList.get(2), views);
+                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1), imgNameList.get(2), views, suggestion);
                                         break;
                                     case 4:
-                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1),imgNameList.get(2), imgNameList.get(3), views);
+                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1),imgNameList.get(2), imgNameList.get(3), views, suggestion);
                                         break;
                                     case 5:
-                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1),imgNameList.get(2),imgNameList.get(3),imgNameList.get(4), views);
+                                        writing = new Writing(name, title, content, item, getTime(), imgNameList.get(0),imgNameList.get(1),imgNameList.get(2),imgNameList.get(3),imgNameList.get(4), views, suggestion);
                                         break;
                                 }
                                 mDatabase.child("writing").push().setValue(writing); // DB에 글 저장

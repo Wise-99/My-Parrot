@@ -45,6 +45,7 @@ public class WritingViewActivity extends AppCompatActivity {
     private String time;
     private String tab;
     private int views;
+    private int suggestion;
     private String img1;
     private String img2;
     private String img3;
@@ -196,6 +197,46 @@ public class WritingViewActivity extends AppCompatActivity {
         });
     }
 
+    private void reviseWriting(){
+        mDatabase_w.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot_w) {
+                for (DataSnapshot snapshot_w : dataSnapshot_w.getChildren()) {
+                    if (snapshot_w.child("/title").getValue().equals(title) && snapshot_w.child("/content").getValue().equals(content)) {
+                        writing_uid = snapshot_w.getKey();
+
+                        Intent reviseIntent =  new Intent(WritingViewActivity.this, WritingReviseActivity.class);   //화면 넘겨주기
+                        reviseIntent.putExtra("title", title);
+                        reviseIntent.putExtra("content", content);
+                        reviseIntent.putExtra("tab", tab);
+                        reviseIntent.putExtra("writingUid", writing_uid);
+
+                        if(img1 != null){
+                            reviseIntent.putExtra("img1", img1);
+                        }
+                        if(img2 != null){
+                            reviseIntent.putExtra("img2", img2);
+                        }
+                        if(img3 != null){
+                            reviseIntent.putExtra("img3", img3);
+                        }
+                        if(img4 != null){
+                            reviseIntent.putExtra("img4", img4);
+                        }
+                        if(img5 != null){
+                            reviseIntent.putExtra("img5", img5);
+                        }
+                        startActivity(reviseIntent);
+
+                        finish();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }
+
     private void deleteComment(String delete_comments){
         mDatabase_c.addValueEventListener(new ValueEventListener() {
             @Override
@@ -225,6 +266,7 @@ public class WritingViewActivity extends AppCompatActivity {
         TextView load_nickname = (TextView)findViewById(R.id.textView8);
         TextView load_time = (TextView)findViewById(R.id.textView9);
         TextView load_views = (TextView)findViewById(R.id.textView10);
+        TextView load_suggestion = (TextView)findViewById(R.id.textViewSuggestion);
         ImageView load_img1 = (ImageView)findViewById(R.id.imageView6);
         ImageView load_img2 = (ImageView)findViewById(R.id.imageView7);
         ImageView load_img3 = (ImageView)findViewById(R.id.imageView8);
@@ -243,12 +285,14 @@ public class WritingViewActivity extends AppCompatActivity {
         time = getIntent.getStringExtra("time");
         views = getIntent.getIntExtra("views", 1) + 1;
         tab = getIntent.getStringExtra("tabs");
+        suggestion = getIntent.getIntExtra("suggestion", 0);
 
         load_title.setText(title);
         load_content.setText(content);
         load_nickname.setText("작성자 " + writename);
         load_time.setText("작성날짜 "+time);
         load_views.setText("조회수 " + String.valueOf(views));
+        load_suggestion.setText(load_suggestion.getText()+String.valueOf(suggestion));
 
         // 조회수 업데이트
         mDatabase_w.addValueEventListener(new ValueEventListener() {
@@ -258,7 +302,7 @@ public class WritingViewActivity extends AppCompatActivity {
                     // 내용과 시간이 같은 글을 찾으면
                     if (snapshots.child("/content").getValue().equals(content) && snapshots.child("/time").getValue().equals(time)) {
                         writing_uid = snapshots.getKey(); // 글의 uid 받아오기
-                        mDatabase_w.child("/"+writing_uid+"/views").setValue(views); // 조회수 업데이트
+                        mDatabase_w.child("/"+writing_uid+"/views").setValue(views); // 조회수 + 1
                         break;
                     }
                 }
@@ -268,6 +312,7 @@ public class WritingViewActivity extends AppCompatActivity {
             }
         });
 
+        // 이미지 불러오기
         if(getIntent.getStringExtra("img1") != null){
             img1 = getIntent.getStringExtra("img1");
             storageRef.child("images/" + img1).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -458,6 +503,15 @@ public class WritingViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 deleteWriting();
+            }
+        });
+
+        //글 수정 버튼 클릭 시
+        writingRevise_btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                reviseWriting();
             }
         });
     }

@@ -5,15 +5,8 @@
         내용을 입력하세요.\n
         (최대 1000자, 사진은 최대 5장 선택 가능)\n
     </string>
-    <string name="title_activity_main2">MainActivity2</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="hospital">
+        동물 병원들 중에서도 앵무새를 진료해주는 병원이 있고 진료를 해주지 않는 병원도 있어요. \n
+        반드시 병원에 문의 후 방문해주세요!
+    </string>
 </resources>

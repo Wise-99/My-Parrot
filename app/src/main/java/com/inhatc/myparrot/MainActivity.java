@@ -1,11 +1,11 @@
 package com.inhatc.myparrot;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,16 +15,18 @@ import android.widget.TabHost;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.naver.maps.map.MapView;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity implements RecyclerAdapter.Listener{
+public class MainActivity extends AppCompatActivity implements RecyclerAdapter.Listener {
     TabHost myTabHost = null;
     TabHost.TabSpec myTabSpec;
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
     private RecyclerAdapter adapter_boast;
     private RecyclerAdapter adapter_parcelOut;
     private DatabaseReference mDatabase;
-    private RecyclerView recyclerView1;
+    private RecyclerView recycler_rank;
     private RecyclerView recycler_notice;
     private RecyclerView recycler_review;
     private RecyclerView recycler_boast;
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
     private ArrayList<Writing> QAList;
     private ArrayList<Writing> parcelOutList;
     private FirebaseDatabase database;
-    private MapView mapView;
 
     @Override
     public void onStart() {
@@ -74,10 +75,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView1 = findViewById(R.id.recyclerView1);
-        recyclerView1.setHasFixedSize(true);
+        recycler_rank = findViewById(R.id.recyclerView1);
+        recycler_rank.setHasFixedSize(true);
         layoutManager1 = new LinearLayoutManager(this);
-        recyclerView1.setLayoutManager(layoutManager1);
+        recycler_rank.setLayoutManager(layoutManager1);
 
         recycler_notice = findViewById(R.id.recycler_notice);
         recycler_notice.setHasFixedSize(true);
@@ -104,12 +105,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         layoutManager6 = new LinearLayoutManager(this);
         recycler_parcel_out.setLayoutManager(layoutManager6);
 
+        arrayList = new ArrayList<>();
         noticeList = new ArrayList<>();
         reviewList = new ArrayList<>();
         boastList = new ArrayList<>();
         QAList = new ArrayList<>();
         parcelOutList = new ArrayList<>();
-        arrayList = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance();
         mDatabase = database.getReference("writing");
@@ -125,6 +126,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
                     Writing writing = dataSnapshot.getValue(Writing.class);
+
+                    // arrayList.add(writing);
+
+                    // 주제별로 리스트에 넣기
                     if(writing.getTab().equals("공지")){
                         noticeList.add(0, writing);
                     } else if(writing.getTab().equals("후기")){
@@ -135,10 +140,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                         QAList.add(0, writing);
                     }else if(writing.getTab().equals("분양")){
                         parcelOutList.add(0, writing);
-                    } else {
-                        arrayList.add(0, writing);
                     }
                 }
+
+                // 추천 수로 정렬하기
+                Collections.sort(arrayList);
+                Collections.reverse(arrayList);
+
                 adapter.notifyDataSetChanged();
                 adapter_boast.notifyDataSetChanged();
                 adapter_notice.notifyDataSetChanged();
@@ -156,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
 
         adapter = new RecyclerAdapter(arrayList, this);
         adapter.setListener(this);
-        recyclerView1.setAdapter(adapter);
+        recycler_rank.setAdapter(adapter);
 
         adapter_review = new RecyclerAdapter(reviewList, this);
         adapter_review.setListener(this);
@@ -204,25 +212,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         myTabSpec = myTabHost.newTabSpec("parcel_out").setIndicator("분양").setContent(R.id.tab6);
         myTabHost.addTab(myTabSpec);
 
-        myTabSpec = myTabHost.newTabSpec("hospital").setIndicator("병원").setContent(R.id.tab7);
-        myTabHost.addTab(myTabSpec);
-
         myTabHost.setCurrentTab(0);
-
-        mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
         setContentView(R.layout.activity_main);
 
-        recyclerView1 = findViewById(R.id.recyclerView1);
-        recyclerView1.setHasFixedSize(true);
+        recycler_rank = findViewById(R.id.recyclerView1);
+        recycler_rank.setHasFixedSize(true);
         layoutManager1 = new LinearLayoutManager(this);
-        recyclerView1.setLayoutManager(layoutManager1);
+        recycler_rank.setLayoutManager(layoutManager1);
 
         recycler_notice = findViewById(R.id.recycler_notice);
         recycler_notice.setHasFixedSize(true);
@@ -249,12 +250,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         layoutManager6 = new LinearLayoutManager(this);
         recycler_parcel_out.setLayoutManager(layoutManager6);
 
+        arrayList = new ArrayList<>();
         noticeList = new ArrayList<>();
         reviewList = new ArrayList<>();
         boastList = new ArrayList<>();
         QAList = new ArrayList<>();
         parcelOutList = new ArrayList<>();
-        arrayList = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance();
         mDatabase = database.getReference("writing");
@@ -270,6 +271,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
                     Writing writing = dataSnapshot.getValue(Writing.class);
+
+                    arrayList.add(writing);
+
+                    // 주제별로 리스트에 넣기
                     if(writing.getTab().equals("공지")){
                         noticeList.add(0, writing);
                     } else if(writing.getTab().equals("후기")){
@@ -280,10 +285,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                         QAList.add(0, writing);
                     }else if(writing.getTab().equals("분양")){
                         parcelOutList.add(0, writing);
-                    } else {
-                        arrayList.add(0, writing);
                     }
                 }
+
+                // 추천 수로 정렬하기
+                Collections.sort(arrayList);
+                Collections.reverse(arrayList);
+
                 adapter.notifyDataSetChanged();
                 adapter_boast.notifyDataSetChanged();
                 adapter_notice.notifyDataSetChanged();
@@ -301,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
 
         adapter = new RecyclerAdapter(arrayList, this);
         adapter.setListener(this);
-        recyclerView1.setAdapter(adapter);
+        recycler_rank.setAdapter(adapter);
 
         adapter_review = new RecyclerAdapter(reviewList, this);
         adapter_review.setListener(this);
@@ -347,16 +355,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         myTabHost.addTab(myTabSpec);
 
         myTabSpec = myTabHost.newTabSpec("parcel_out").setIndicator("분양").setContent(R.id.tab6);
-        myTabHost.addTab(myTabSpec);
-
-        myTabSpec = myTabHost.newTabSpec("hospital").setIndicator("병원").setContent(R.id.tab7);
         myTabHost.addTab(myTabSpec);
 
         myTabHost.setCurrentTab(0);
     }
 
     private void updateListItems() {
-        adapter.submitList(arrayList);
     }
 
     @Override
@@ -364,7 +368,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         Writing selectedItem = null;
         int tabWidget = myTabHost.getCurrentTab();
 
-        if(tabWidget == 1){
+        if(tabWidget == 0){
+            selectedItem = arrayList.get(position);
+        }
+        else if(tabWidget == 1){
             selectedItem = noticeList.get(position);
         } else if(tabWidget == 2){
             selectedItem = reviewList.get(position);
@@ -383,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         intent.putExtra("name", selectedItem.getNickname());
         intent.putExtra("views", selectedItem.getViews());
         intent.putExtra("tabs", selectedItem.getTab());
+        intent.putExtra("suggestion", selectedItem.getSuggestion());
 
         if(selectedItem.getImage1() != null){
             intent.putExtra("img1", selectedItem.getImage1());
@@ -428,6 +436,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                 Intent intent3 = new Intent(this,MyInfoActivity.class);
                 startActivity(intent3);
                 break;
+            case R.id.map:
+                Intent intent4 = new Intent(this, GoogleMapsActivity.class);
+                startActivity(intent4);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,8 +1,6 @@
 package com.inhatc.myparrot;
 
-import android.net.Uri;
-
-public class Writing {
+public class Writing implements Comparable<Writing>{
     String title;
     String content;
     String tab;
@@ -14,6 +12,7 @@ public class Writing {
     String image4;
     String image5;
     int views;
+    int suggestion;
 
     public String getTitle(){
         return title;
@@ -68,80 +67,99 @@ public class Writing {
         this.views = views;
     }
 
+    public int getSuggestion() {return suggestion; }
+    public void setSuggestion(int suggestion) {this.suggestion = suggestion; }
+
     public Writing(){}
 
-    public Writing(String nickname, String title, String content, String tab, String time, int views){
+    public Writing(String nickname, String title, String content, String tab, String time, int views, int suggestion){
         this.nickname = nickname;
         this.title = title;
         this.content = content;
         this.tab = tab;
         this.time = time;
         this.views = views;
+        this.suggestion = suggestion;
+    }
+
+    public Writing(String nickname, String title, String content, String tab, String time, String image1, int views, int suggestion){
+        this.nickname = nickname;
+        this.title = title;
+        this.content = content;
+        this.tab = tab;
+        this.time = time;
+        this.views = views;
+        this.suggestion = suggestion;
+        this.image1 = image1;
+    }
+
+    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, int views, int suggestion){
+        this.nickname = nickname;
+        this.title = title;
+        this.content = content;
+        this.tab = tab;
+        this.time = time;
+        this.views = views;
+        this.suggestion = suggestion;
+        this.image1 = image1;
+        this.image2 = image2;
+    }
+
+    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, String image3, int views, int suggestion){
+        this.nickname = nickname;
+        this.title = title;
+        this.content = content;
+        this.tab = tab;
+        this.time = time;
+        this.views = views;
+        this.suggestion = suggestion;
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
     }
 
-    public Writing(String nickname, String title, String content, String tab, String time, String image1, int views){
+    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, String image3, String image4, int views, int suggestion){
         this.nickname = nickname;
         this.title = title;
         this.content = content;
         this.tab = tab;
         this.time = time;
         this.views = views;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-    }
-
-    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, int views){
-        this.nickname = nickname;
-        this.title = title;
-        this.content = content;
-        this.tab = tab;
-        this.time = time;
-        this.views = views;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-    }
-
-    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, String image3, int views){
-        this.nickname = nickname;
-        this.title = title;
-        this.content = content;
-        this.tab = tab;
-        this.time = time;
-        this.views = views;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-    }
-
-    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, String image3, String image4, int views){
-        this.nickname = nickname;
-        this.title = title;
-        this.content = content;
-        this.tab = tab;
-        this.time = time;
-        this.views = views;
+        this.suggestion = suggestion;
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
         this.image4 = image4;
     }
 
-    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, String image3, String image4, String image5, int views){
+    public Writing(String nickname, String title, String content, String tab, String time, String image1, String image2, String image3, String image4, String image5, int views, int suggestion){
         this.nickname = nickname;
         this.title = title;
         this.content = content;
         this.tab = tab;
         this.time = time;
         this.views = views;
+        this.suggestion = suggestion;
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
         this.image4 = image4;
         this.image5 = image5;
+    }
+
+    @Override
+    public int compareTo(Writing _writing) {
+        if(this.getSuggestion() < _writing.getSuggestion()) {
+            System.out.println("!!!!!!");
+            return -1;
+        }
+        else if(this.getSuggestion() == _writing.getSuggestion()) {
+            System.out.println("@@@@@@@@");
+            return 0;
+        }
+        else {
+            System.out.println("#########");
+            return 1;
+        }
     }
 }

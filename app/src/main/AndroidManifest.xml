@@ -1,42 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.inhatc.myparrot" >
+    package="com.inhatc.myparrot">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyParrot" >
+        android:theme="@style/Theme.MyParrot">
+
         <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="API_KEY" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyClnzDaJggrqnTDVRkXBlbR6zfjKBnT7v4" />
+
+        <activity
+            android:name=".GoogleMapsActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".LoginActivity" />
-
-        <activity android:name=".JoinActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".WriteActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name=".JoinActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".WriteActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".SubJoinActivity" />
-
-        <activity android:name=".WritingViewActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name=".WritingViewActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MyInfoActivity" />
+        <activity android:name=".WritingReviseActivity" />
     </application>
 </manifest>

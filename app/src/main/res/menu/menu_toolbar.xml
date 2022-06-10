@@ -10,6 +10,10 @@
         android:title="글쓰기"
         android:textStyle="normal"/>
     <item
+        android:id="@+id/map"
+        android:title="동물 병원 위치"
+        android:textStyle="normal"/>
+    <item
         android:id="@+id/log"
         android:title="로그아웃"
         android:textStyle="normal"/>
