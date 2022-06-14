@@ -150,15 +150,14 @@ public class Writing implements Comparable<Writing>{
     @Override
     public int compareTo(Writing _writing) {
         if(this.getSuggestion() < _writing.getSuggestion()) {
-            System.out.println("!!!!!!");
             return -1;
         }
         else if(this.getSuggestion() == _writing.getSuggestion()) {
-            System.out.println("@@@@@@@@");
+            if(this.getViews() < _writing.getViews())
+                return -1;
             return 0;
         }
         else {
-            System.out.println("#########");
             return 1;
         }
     }

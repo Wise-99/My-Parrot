@@ -10,6 +10,7 @@
         layout="@layout/toolbar" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -73,15 +74,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="추천"
-                android:background="@drawable/round_button" />
+                android:background="@drawable/round_button"
+                android:text="추천" />
 
             <TextView
                 android:id="@+id/textViewSuggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:text="추천 수 : "
+                android:text="0"
                 android:textColor="@color/black" />
 
             <ImageView
@@ -119,38 +120,36 @@
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="80dp"
+                android:layout_gravity="left"
+                android:ems="10"
+                android:hint="댓글을 작성해주세요."
+                android:inputType="textMultiLine"
+                android:lines="10" />
 
-                <EditText
-                    android:id="@+id/comment"
-                    android:layout_width="300dp"
-                    android:layout_height="80dp"
-                    android:ems="10"
-                    android:inputType="textMultiLine"
-                    android:lines="10" />
-
-                <Button
-                    android:id="@+id/comment_btn"
-                    android:layout_width="100dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_button"
-                    android:text="댓글 등록" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/comment_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:background="@drawable/round_button"
+                android:text="댓글 등록" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerComment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
-                android:id="@+id/textView17"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="50sp" />
+                android:id="@+id/textView15"
+                android:layout_width="0dp"
+                android:layout_height="100dp" />
 
         </LinearLayout>
     </ScrollView>

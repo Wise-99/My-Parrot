@@ -12,9 +12,17 @@ import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
+    interface Listener {
+        void onItemClickedAt(Integer position);
+    }
+
     private ArrayList<Comment> arrayList;
     private Context context;
     private OnItemClickListener mListener = null; //리스너 객체 참조 변수
+    private Listener listener;
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
 
     interface OnItemClickListener{
         void onDeleteClick(View v, int position);//삭제

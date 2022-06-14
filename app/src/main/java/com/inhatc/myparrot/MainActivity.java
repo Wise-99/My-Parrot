@@ -25,11 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements RecyclerAdapter.Listener {
     TabHost myTabHost = null;
     TabHost.TabSpec myTabSpec;
 
+    private DatabaseReference mDatabase_w = FirebaseDatabase.getInstance().getReference("writing");
+    private String writing_uid;
     private FirebaseAuth mAuth;
     private RecyclerAdapter adapter;
     private RecyclerAdapter adapter_review;
@@ -64,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         // Check if user is signed in (non-null) and update UI accordingly.
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser == null){
-            Intent intent1 = new Intent(this,LoginActivity.class);
+        if (currentUser == null) {
+            Intent intent1 = new Intent(this, LoginActivity.class);
             startActivity(intent1);
         }
     }
@@ -123,22 +126,22 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                 boastList.clear();
                 QAList.clear();
                 parcelOutList.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                     Writing writing = dataSnapshot.getValue(Writing.class);
 
-                    // arrayList.add(writing);
+                    arrayList.add(writing);
 
                     // 주제별로 리스트에 넣기
-                    if(writing.getTab().equals("공지")){
+                    if (writing.getTab().equals("공지")) {
                         noticeList.add(0, writing);
-                    } else if(writing.getTab().equals("후기")){
+                    } else if (writing.getTab().equals("후기")) {
                         reviewList.add(0, writing);
-                    } else if(writing.getTab().equals("자랑")){
+                    } else if (writing.getTab().equals("자랑")) {
                         boastList.add(0, writing);
-                    } else if(writing.getTab().equals("질문")){
+                    } else if (writing.getTab().equals("질문")) {
                         QAList.add(0, writing);
-                    }else if(writing.getTab().equals("분양")){
+                    } else if (writing.getTab().equals("분양")) {
                         parcelOutList.add(0, writing);
                     }
                 }
@@ -191,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myTabHost = (TabHost)findViewById(R.id.tabhost);
+        myTabHost = (TabHost) findViewById(R.id.tabhost);
         myTabHost.setup();
 
         myTabSpec = myTabHost.newTabSpec("rank").setIndicator("랭킹").setContent(R.id.tab1);
@@ -268,22 +271,22 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
                 boastList.clear();
                 QAList.clear();
                 parcelOutList.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                     Writing writing = dataSnapshot.getValue(Writing.class);
 
                     arrayList.add(writing);
 
                     // 주제별로 리스트에 넣기
-                    if(writing.getTab().equals("공지")){
+                    if (writing.getTab().equals("공지")) {
                         noticeList.add(0, writing);
-                    } else if(writing.getTab().equals("후기")){
+                    } else if (writing.getTab().equals("후기")) {
                         reviewList.add(0, writing);
-                    } else if(writing.getTab().equals("자랑")){
+                    } else if (writing.getTab().equals("자랑")) {
                         boastList.add(0, writing);
-                    } else if(writing.getTab().equals("질문")){
+                    } else if (writing.getTab().equals("질문")) {
                         QAList.add(0, writing);
-                    }else if(writing.getTab().equals("분양")){
+                    } else if (writing.getTab().equals("분양")) {
                         parcelOutList.add(0, writing);
                     }
                 }
@@ -336,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myTabHost = (TabHost)findViewById(R.id.tabhost);
+        myTabHost = (TabHost) findViewById(R.id.tabhost);
         myTabHost.setup();
 
         myTabSpec = myTabHost.newTabSpec("rank").setIndicator("랭킹").setContent(R.id.tab1);
@@ -368,22 +371,21 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         Writing selectedItem = null;
         int tabWidget = myTabHost.getCurrentTab();
 
-        if(tabWidget == 0){
+        if (tabWidget == 0) {
             selectedItem = arrayList.get(position);
-        }
-        else if(tabWidget == 1){
+        } else if (tabWidget == 1) {
             selectedItem = noticeList.get(position);
-        } else if(tabWidget == 2){
+        } else if (tabWidget == 2) {
             selectedItem = reviewList.get(position);
-        } else if(tabWidget == 3){
+        } else if (tabWidget == 3) {
             selectedItem = boastList.get(position);
-        }else if(tabWidget == 4){
+        } else if (tabWidget == 4) {
             selectedItem = QAList.get(position);
-        }else if(tabWidget == 5){
+        } else if (tabWidget == 5) {
             selectedItem = parcelOutList.get(position);
         }
 
-        Intent intent =  new Intent(this, WritingViewActivity.class);   //화면 넘겨주기
+        Intent intent = new Intent(this, WritingViewActivity.class);   //화면 넘겨주기
         intent.putExtra("title", selectedItem.getTitle());
         intent.putExtra("content", selectedItem.getContent());
         intent.putExtra("time", selectedItem.getTime());
@@ -392,19 +394,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
         intent.putExtra("tabs", selectedItem.getTab());
         intent.putExtra("suggestion", selectedItem.getSuggestion());
 
-        if(selectedItem.getImage1() != null){
+        if (selectedItem.getImage1() != null) {
             intent.putExtra("img1", selectedItem.getImage1());
         }
-        if(selectedItem.getImage2() != null){
+        if (selectedItem.getImage2() != null) {
             intent.putExtra("img2", selectedItem.getImage2());
         }
-        if(selectedItem.getImage3() != null){
+        if (selectedItem.getImage3() != null) {
             intent.putExtra("img3", selectedItem.getImage3());
         }
-        if(selectedItem.getImage4() != null){
+        if (selectedItem.getImage4() != null) {
             intent.putExtra("img4", selectedItem.getImage4());
         }
-        if(selectedItem.getImage5() != null){
+        if (selectedItem.getImage5() != null) {
             intent.putExtra("img5", selectedItem.getImage5());
         }
 
@@ -412,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_toolbar, menu);
         return true;
@@ -420,20 +422,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.L
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.log:
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_LONG).show();
-                Intent intent1 = new Intent(this,LoginActivity.class);
+                Intent intent1 = new Intent(this, LoginActivity.class);
                 startActivity(intent1);
                 finish();
                 break;
             case R.id.write:
-                Intent intent2 = new Intent(this,WriteActivity.class);
+                Intent intent2 = new Intent(this, WriteActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.info:
-                Intent intent3 = new Intent(this,MyInfoActivity.class);
+                Intent intent3 = new Intent(this, MyInfoActivity.class);
                 startActivity(intent3);
                 break;
             case R.id.map:
