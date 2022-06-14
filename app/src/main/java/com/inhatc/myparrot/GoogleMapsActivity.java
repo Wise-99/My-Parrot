@@ -141,7 +141,7 @@ public class GoogleMapsActivity extends AppCompatActivity
 
         new NRPlaces.Builder()
                 .listener(GoogleMapsActivity.this)
-                .key("AIzaSyCbMVNoax4FtxyNGLFHCyTidH7AHpN2mqA")
+                .key("WRITE_YOYR_KEY")
                 .latlng(location.latitude, location.longitude)//현재 위치
                 .radius(1000) //1000 미터 내에서 검색
                 .type(PlaceType.VETERINARY_CARE) //동물병원
