@@ -373,27 +373,6 @@ public class WritingViewActivity extends AppCompatActivity implements CommentAda
         load_views.setText("조회수 " + String.valueOf(views));
         load_suggestion.setText("추천 수 : "+String.valueOf(suggestion));
 
-        // 조회수 업데이트
-        /*mDatabase_w.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot_vu) {
-                for (DataSnapshot snapshots_vu : snapshot_vu.getChildren()) {
-                    // 내용과 시간이 같은 글을 찾으면
-                    if (snapshots_vu.child("/content").getValue().equals(content) && snapshots_vu.child("/time").getValue().equals(time)) {
-                        writing_uid = snapshots_vu.getKey(); // 글의 uid 받아오기
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("views", views);
-
-                        mDatabase_w.child(writing_uid).updateChildren(hashMap);
-                        break;
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });*/
-
         // 이미지 불러오기
         if(getIntent.getStringExtra("img1") != null){
             img1 = getIntent.getStringExtra("img1");
@@ -571,6 +550,7 @@ public class WritingViewActivity extends AppCompatActivity implements CommentAda
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        // 조회수 업데이트
         mDatabase_w.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot_vu) {
