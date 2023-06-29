@@ -3,7 +3,7 @@
 ## 📖 프로젝트 소개
 | 메인 및 메뉴 화면 | 지도 화면 | 게시글 작성 화면 | 댓글 화면 |
 |--|--|--|--|
-| ![메인 및 메뉴 화면](https://file.notion.so/f/s/c94062a2-5a38-469a-8206-21e4e68bb91e/Untitled.png?id=c47bcecc-384f-485e-8d76-9952594396a9&table=block&spaceId=4fee607c-9fab-47df-96d0-8ba12808c88d&expirationTimestamp=1687421112790&signature=g38hyUSPFb8gRTGEow2DQl2IkLmbBvCVvDu8q8OF__s&downloadName=Untitled.png) | ![지도 화면] (https://github.com/Wise-99/My-Parrot/assets/90273263/5c35cd61-c4a6-4381-b871-01d82042b984)
+| ![메인 및 메뉴 화면](https://file.notion.so/f/s/c94062a2-5a38-469a-8206-21e4e68bb91e/Untitled.png?id=c47bcecc-384f-485e-8d76-9952594396a9&table=block&spaceId=4fee607c-9fab-47df-96d0-8ba12808c88d&expirationTimestamp=1687421112790&signature=g38hyUSPFb8gRTGEow2DQl2IkLmbBvCVvDu8q8OF__s&downloadName=Untitled.png) | ![지도 화면](https://github.com/Wise-99/My-Parrot/assets/90273263/5c35cd61-c4a6-4381-b871-01d82042b984)
  | ![게시글 작성 화면](https://file.notion.so/f/s/476eaa97-cef9-4add-8c93-8ff792f75ea7/Untitled.png?id=19c9dc9b-2e0d-4610-b4a8-680eebf35b3f&table=block&spaceId=4fee607c-9fab-47df-96d0-8ba12808c88d&expirationTimestamp=1687421119533&signature=tOkYmu_7fuSOdvhuswdH-SLFMoEyCZspuKP7FshWU9Y&downloadName=Untitled.png) | ![댓글 화면](https://file.notion.so/f/s/6c686914-d20d-41db-ab72-0dd5ea67ea32/Untitled.png?id=da7e4fe5-0159-4895-b5b9-37f4deeaba48&table=block&spaceId=4fee607c-9fab-47df-96d0-8ba12808c88d&expirationTimestamp=1687421122838&signature=iyiZX18-krGIiAs3bIN3MPY1paPXgN4s9eOqvGkttGQ&downloadName=Untitled.png) |
 
 > 🦜 앵무새를 키우는 사람들이 정보를 주고 받을 수 있는 **앵무새 커뮤니티 앱**입니다. 정보 공유 뿐만 아니라 **병원 정보, 다양한 후기, 분양**까지 할 수 있도록 탭을 구성하였습니다. 해당 앱은 **로그인**을 해야 이용할 수 있습니다.
